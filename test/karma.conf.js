@@ -26,7 +26,7 @@ module.exports = function (config) {
         ],
 
         preprocessors: {
-            '*.coffee': ['coffee']
+            '/**/*.coffee': ['coffee']
         },
 
         coffeePreprocessor: {
