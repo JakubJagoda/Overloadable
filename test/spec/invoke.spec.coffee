@@ -3,19 +3,18 @@ describe 'Overloadad functions', ->
     spiedFunction = jasmine.createSpy()
 
     describe 'Default function', ->
-        it 'should throw error when default function isn\'t undefined or a function', ->
-            func = null
-            
+        it 'should throw error when default function isn\'t undefined or a function', ->           
             for item in [7, 'foo', true, null, {}]
-                func = -> new Overloadable item
-                expect(func).toThrow()
+                expect(-> new Overloadable item).toThrow()
             
-            func = -> new Overloadable(->)
-            expect(func).not.toThrow()
+            expect(-> 
+                new Overloadable(->)
+            ).not.toThrow()
             
-            func = -> new Overloadable
-            expect(func).not.toThrow()
-    
+            expect(->
+                new Overloadable
+            ).not.toThrow()
+            
         it 'should throw error when called without any overloads and a default function', ->
             overloadableFunction = new Overloadable
             expect(overloadableFunction).toThrow()
