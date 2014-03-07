@@ -1,6 +1,6 @@
 Overloadable = (defaultFunction) ->
-    if typeof defaultFunction isnt 'function' and typeof defaultFunction isnt 'undefined'
-    then throw new TypeError 'If passed, argument defaultFunction must be a function'
+    if typeof defaultFunction isnt "function" and typeof defaultFunction isnt "undefined"
+    then throw new TypeError "If passed, argument defaultFunction must be a function"
     
     signaturesContainer = []
     overloadableFunction = ->
