@@ -48,3 +48,43 @@ describe "Overloadad functions", ->
             overloadableFunction 7, true, "foo"
             
             expect(spiedFunction).toHaveBeenCalledWith 7, true, "foo"
+
+    describe "String arguments", ->
+        testedTypesAndExamples = 
+            number: 7
+            boolean: true
+            string: "foo"
+            object: {}
+            array: []
+            function: ->
+            regexp: /\./
+        
+        beforeEach ->
+            overloadableFunction = new Overloadable
+        
+        for type, typeExample of testedTypesAndExamples
+            it "should match argument of type #{type}", ->
+                overloadableFunction.overload [type], spiedFunction
+                overloadableFunction typeExample
+            
+                expect(spiedFunction).toHaveBeenCalled()
+                expect(spiedFunction).toHaveBeenCalledWith typeExample
+                
+                
+            it "shouldn't match argument of type #{type} when given argument of another type", ->
+                getAnotherType = ->
+                    types = Object.getOwnPropertyNames testedTypesAndExamples
+                    randomType = type
+                    
+                    while randomType is type
+                        randomType = types[Math.floor(Math.random()) * types.length]
+                    
+                    randomType
+                        
+                anotherType = getAnotherType()
+
+                expect(->
+                    overloadableFunction anotherType
+                ).toThrow()
+                
+               expect(spiedFunction).not.toHaveBeenCalled() 
