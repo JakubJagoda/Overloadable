@@ -45,7 +45,8 @@ getFunctionMatchingArgumentsList = (signaturesContainer, argumentsList) ->
         
      null
         
-isSignatureMatchingArgumentsList = (signatureArgumentsList, argumentsList) -> 
+isSignatureMatchingArgumentsList = (signatureArgumentsList, argumentsList) ->
+    return false if signatureArgumentsList.length isnt argumentsList.length
     for signatureArgument, i in signatureArgumentsList
         return false if signatureArgument isnt Overloadable.getClassOf argumentsList[i]
         
