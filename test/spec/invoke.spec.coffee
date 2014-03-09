@@ -61,30 +61,45 @@ describe "Overloadad functions", ->
         
         beforeEach ->
             overloadableFunction = new Overloadable
-        
-        for type, typeExample of testedTypesAndExamples
-            it "should match argument of type #{type}", ->
-                overloadableFunction.overload [type], spiedFunction
-                overloadableFunction typeExample
+            spiedFunction.reset()
             
-                expect(spiedFunction).toHaveBeenCalled()
-                expect(spiedFunction).toHaveBeenCalledWith typeExample
-                
-                
-            it "shouldn't match argument of type #{type} when given argument of another type", ->
-                getAnotherType = ->
-                    types = Object.getOwnPropertyNames testedTypesAndExamples
-                    randomType = type
+        getOtherTypeThan = (type) ->
+            types = Object.getOwnPropertyNames testedTypesAndExamples
+            randomType = type
                     
-                    while randomType is type
-                        randomType = types[Math.floor(Math.random()) * types.length]
-                    
-                    randomType
-                        
-                anotherType = getAnotherType()
+            while randomType is type
+                randomType = types[Math.floor(Math.random() * types.length)]
 
-                expect(->
-                    overloadableFunction anotherType
-                ).toThrow()
+            randomType
+        
+        for type, typeExample of testedTypesAndExamples 
+            do (type, typeExample) ->
+                anotherType = getOtherTypeThan type
+                anotherTypeExample = testedTypesAndExamples[anotherType]
+                           
+                it "should match argument of type '#{type}'", ->
+                    overloadableFunction.overload [type], spiedFunction
+                    overloadableFunction typeExample
+            
+                    expect(spiedFunction).toHaveBeenCalled()
+                    expect(spiedFunction).toHaveBeenCalledWith typeExample
                 
-               expect(spiedFunction).not.toHaveBeenCalled() 
+                it "shouldn't match argument of type '#{type}' when given
+                    argument of another type (randomly got '#{anotherType}')", ->
+                    overloadableFunction.overload [type], spiedFunction
+                
+                    expect(->
+                        overloadableFunction anotherTypeExample
+                    ).toThrow()
+                
+                    expect(spiedFunction).not.toHaveBeenCalled()
+               
+                it "should choose correct signature when there are more than one", ->            
+                    overloadableFunction.overload [type], spiedFunction
+                    overloadableFunction.overload [anotherTypeExample], ->
+                
+                    overloadableFunction typeExample
+                
+                    expect(spiedFunction).toHaveBeenCalled()
+                    expect(spiedFunction).toHaveBeenCalledWith typeExample
+        return
