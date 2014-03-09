@@ -20,6 +20,12 @@ Overloadable.getClassOf = (what) ->
 
 #overload is always bound to a signature container of an overloadable function
 overload = (argumentsList, functionToCall) ->
+    if not Array.isArray(argumentsList) or argumentsList.length is 0
+        throw new Error "You should pass a nonempty array of arguments expected in a signature"
+        
+    unless typeof functionToCall is "function"
+        throw new Error "You should pass a function that will be assigned to array of arguments"
+    
     @push { argumentsList, functionToCall }
 
 invoke = (signaturesContainer, invocationArguments, defaultFunction) ->
