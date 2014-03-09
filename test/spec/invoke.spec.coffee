@@ -92,3 +92,16 @@ describe "Overloaded functions", ->
             expect(->
                 overloadableFunction 7, "foo"
             ).toThrow()
+
+    describe "Array arguments", ->
+        beforeEach ->
+            overloadableFunction = new Overloadable
+            spiedFunction.reset()
+            
+        it "Should recognize array arguments and use them as an alternative", ->
+            overloadableFunction.overload [["number", "string"]], spiedFunction
+            
+            overloadableFunction 1
+            overloadableFunction "a"
+            
+            expect(spiedFunction.callCount).toBe 2
