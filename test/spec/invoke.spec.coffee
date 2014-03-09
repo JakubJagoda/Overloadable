@@ -85,4 +85,10 @@ describe "Overloaded functions", ->
                 
                     expect(spiedFunction).toHaveBeenCalled()
                     expect(spiedFunction).toHaveBeenCalledWith typeExample
-        return
+        
+        it "should not match if there are more arguments passed than were in
+           the function signature", ->
+            overloadableFunction.overload ["number"], ->
+            expect(->
+                overloadableFunction 7, "foo"
+            ).toThrow()
