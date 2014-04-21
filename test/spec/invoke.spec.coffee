@@ -61,7 +61,7 @@ describe "Overloaded functions", ->
                 anotherTypeExample = testedTypesAndExamples[anotherType]
                            
                 it "should match argument of type '#{type}'", ->
-                    overloadableFunction.overload [type], spiedFunction
+                    overloadableFunction.overload type, spiedFunction
                     overloadableFunction typeExample
             
                     expect(spiedFunction).toHaveBeenCalled()
@@ -69,7 +69,7 @@ describe "Overloaded functions", ->
                 
                 it "shouldn't match argument of type '#{type}' when given
                     argument of another type (randomly got '#{anotherType}')", ->
-                    overloadableFunction.overload [type], spiedFunction
+                    overloadableFunction.overload type, spiedFunction
                 
                     expect(->
                         overloadableFunction anotherTypeExample
@@ -78,8 +78,8 @@ describe "Overloaded functions", ->
                     expect(spiedFunction).not.toHaveBeenCalled()
                
                 it "should choose correct signature when there are more than one", ->            
-                    overloadableFunction.overload [type], spiedFunction
-                    overloadableFunction.overload [anotherTypeExample], ->
+                    overloadableFunction.overload type, spiedFunction
+                    overloadableFunction.overload anotherType, ->
                 
                     overloadableFunction typeExample
                 
@@ -88,7 +88,7 @@ describe "Overloaded functions", ->
         
         it "should not match if there are more arguments passed than were in
            the function signature", ->
-            overloadableFunction.overload ["number"], ->
+            overloadableFunction.overload "number", ->
             expect(->
                 overloadableFunction 7, "foo"
             ).toThrow()
@@ -98,10 +98,19 @@ describe "Overloaded functions", ->
             overloadableFunction = new Overloadable
             spiedFunction.reset()
             
-        it "Should recognize array arguments and use them as an alternative", ->
-            overloadableFunction.overload [["number", "string"]], spiedFunction
+        it "should recognize array arguments and use them as an alternative", ->
+            overloadableFunction.overload ["number", "string"], spiedFunction
             
             overloadableFunction 1
             overloadableFunction "a"
             
             expect(spiedFunction.callCount).toBe 2
+            
+        it "should deal with nested arrays", ->
+            overloadableFunction.overload ["number", ["string", "boolean"]], spiedFunction
+            
+            overloadableFunction 1
+            overloadableFunction "a"
+            overloadableFunction true
+            
+            expect(spiedFunction.callCount).toBe 3

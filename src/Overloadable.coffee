@@ -1,10 +1,11 @@
 ERRORS =
     INVALID_OVERLOAD_CALL: ".overload() should be called with at least 1 element defining signature and a function to call"
-    INVALID_OVERLOAD_FUNCTION: "You should pass a function that will be assigned to array of arguments"
+    INVALID_OVERLOAD_FUNCTION: "You should pass a function that will be assigned to set of arguments"
     NO_MATCHING_OVERLOADS: "No overloads matches given signature"
     INVALID_DEFAULT_FUNCTION: "If passed, argument defaultFunction must be a function"
     FUNCTION_NOT_EXTENSIBLE: "You cannot overload non-extensible function"
     NO_SUCH_MATCHER: "That type of matcher doesn't exist"
+    UNSUPPORTED_SIGNATURE_ELEMENT: "Tried to add overload with unsupported argument type"
 
 class Overloadable
     @_inheritFromOverloadable: do ->
@@ -79,7 +80,10 @@ for own property of Overloadable.prototype
 class Overload
     constructor: (signature, @_assignedFunction) ->
         compiledSignature = for signatureElement in signature
-            matcher = AbstractMatcher.getMatcher signatureElement
+            try
+                matcher = AbstractMatcher.getMatcher signatureElement
+            catch e
+                throw new Error ERRORS.UNSUPPORTED_SIGNATURE_ELEMENT
             matcher.compile signatureElement
             
         @_signature = compiledSignature
