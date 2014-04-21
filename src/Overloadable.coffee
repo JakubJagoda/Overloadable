@@ -6,6 +6,14 @@ ERRORS =
     FUNCTION_NOT_EXTENSIBLE: "You cannot overload non-extensible function"
     NO_SUCH_MATCHER: "That type of matcher doesn't exist"
     UNSUPPORTED_SIGNATURE_ELEMENT: "Tried to add overload with unsupported argument type"
+    
+class Utils
+    @lockOwnProperties: (object) ->
+        for own property of object
+            Object.defineProperty object, property,
+                enumerable: false
+                writable: false
+                configurable: false
 
 class Overloadable
     @_inheritFromOverloadable: do ->
@@ -15,11 +23,11 @@ class Overloadable
             return (overloadableFunction) ->
                 Object.setPrototypeOf overloadableFunction, Overloadable.prototype
         else return (overloadableFunction) ->
-            for own property of Overloadable.prototype
+            prototypeProperties = Object.getOwnPropertyNames Overloadable.prototype
+            for property in prototypeProperties when property isnt "constructor"
                 Object.defineProperty overloadableFunction, property,
                     value: Overloadable.prototype[property]
-                
-        
+                    
     constructor: (defaultFunction) ->
         if defaultFunction? and typeof defaultFunction isnt "function"
     	    throw new TypeError ERRORS.INVALID_DEFAULT_FUNCTION
@@ -29,6 +37,8 @@ class Overloadable
     	    
         overloadableFunction._overloads = []
         overloadableFunction._defaultFunction = defaultFunction;
+        
+        Utils.lockOwnProperties(overloadableFunction)
         
         Overloadable._inheritFromOverloadable overloadableFunction
         
@@ -67,13 +77,8 @@ class Overloadable
                 return overload.getAssignedFunction()            
         null
 
-###NO TESTS!
-for own property of Overloadable.prototype
-    Object.defineProperty Overloadable.prototype, property,
-        enumerable: false
-        writable: false
-        configurable: false
-!!!###
+Utils.lockOwnProperties(Overloadable)
+Utils.lockOwnProperties(Overloadable.prototype)
         
 class Overload
     constructor: (signature, @_assignedFunction) ->
