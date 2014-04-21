@@ -121,13 +121,13 @@ describe "Overloaded functions", ->
             spiedFunction.reset()
             
         it "should recognize function arguments and use them as instanceof check", ->
-            overloadableFunction.overload Object, spiedFunction
+            overloadableFunction.overload Function, spiedFunction
             overloadableFunction.overload Array, spiedFunction
             
             expect( ->
                 overloadableFunction 1
             ).toThrow()
             
-            overloadableFunction {}
+            overloadableFunction ->
             overloadableFunction []
             expect(spiedFunction.callCount).toBe 2
