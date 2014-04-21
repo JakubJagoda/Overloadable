@@ -177,6 +177,13 @@ class InstanceofMatcher extends AbstractMatcher
         
     matcherFactory.registerMatcher "function", InstanceofMatcher
     
+class RegExpMatcher extends AbstractMatcher
+    match: (argument, overloadSignatureElement) ->
+        return false if Utils.getClassOf(argument) isnt "string"
+        overloadSignatureElement.test argument
+    
+    matcherFactory.registerMatcher "regexp", RegExpMatcher
+
 class CompiledMatcher
     constructor: (@_matcher, @_value) ->
     
