@@ -146,7 +146,7 @@ class AlternativeMatcher extends AbstractMatcher
             matcher = AbstractMatcher.getMatcher element
             if matcher.match(argument, element) then return true
             
-        return false
+        false
         
     compile: (matcherValue) ->
         flattenedArray = @flattenArray(matcherValue)
@@ -173,7 +173,7 @@ class AlternativeMatcher extends AbstractMatcher
     
 class InstanceofMatcher extends AbstractMatcher
     match: (argument, overloadSignatureElement) ->
-        return argument instanceof overloadSignatureElement
+        argument instanceof overloadSignatureElement
         
     matcherFactory.registerMatcher "function", InstanceofMatcher
     
