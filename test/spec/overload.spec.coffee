@@ -37,3 +37,13 @@
         expect( ->
             overloadableFunc.overload ["null", "null"], ->
         ).not.toThrow()
+        
+    it "should accept function arguments", ->
+        expect( ->
+            overloadableFunc.overload Object, ->
+        ).not.toThrow()
+        
+    it "should accept regexp arguments", ->
+        expect( ->
+            overloadableFunc.overload /\./, ->
+        ).not.toThrow()
