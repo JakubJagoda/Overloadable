@@ -131,3 +131,35 @@ describe "Overloaded functions", ->
             overloadableFunction ->
             overloadableFunction []
             expect(spiedFunction.callCount).toBe 2
+            
+    describe "RegExp arguments", ->
+        beforeEach ->
+            overloadableFunction = new Overloadable
+            spiedFunction.reset()
+            
+        it "should recognize regexp arguments and use them as regexp match check", ->
+            overloadableFunction.overload /\d+/, spiedFunction
+            
+            expect( ->
+                overloadableFunction "a"
+            ).toThrow()
+            
+            overloadableFunction "1"
+            expect(spiedFunction.callCount).toBe 1
+            
+        it "should not deal with other arguments than strings, when invoking", ->
+            overloadableFunction.overload /\d+/, spiedFunction
+            
+            expect( ->
+                overloadableFunction 1
+            ).toThrow()
+            
+            expect( ->
+                overloadableFunction "1"
+            ).not.toThrow()
+            
+            expect( ->
+                overloadableFunction new String "1"
+            ).not.toThrow()
+            
+            expect(spiedFunction.callCount).toBe 2
