@@ -14,6 +14,10 @@ class Utils
                 enumerable: false
                 writable: false
                 configurable: false
+                
+    @getClassOf: (what) -> 
+        whatAsString = Object::toString.call(what)
+        /\[object (\w+)\]/.exec(whatAsString)[1].toLowerCase()
 
 class Overloadable
     @_inheritFromOverloadable: do ->
@@ -122,13 +126,9 @@ class MatcherFactory
         
 matcherFactory = new MatcherFactory()
 
-class AbstractMatcher
-    @_getClassOf: (what) -> 
-        whatAsString = Object::toString.call(what)
-        /\[object (\w+)\]/.exec(whatAsString)[1].toLowerCase()
-        
+class AbstractMatcher        
     @getMatcher: (argument) ->
-        argumentClass = @_getClassOf argument
+        argumentClass = Utils.getClassOf argument
         matcherFactory.getMatcher argumentClass
     
     compile: (value) ->
@@ -136,7 +136,7 @@ class AbstractMatcher
         
 class TypeMatcher extends AbstractMatcher        
     match: (argument, overloadSignatureElement) ->
-        AbstractMatcher._getClassOf(argument) is overloadSignatureElement
+        Utils.getClassOf(argument) is overloadSignatureElement
         
     matcherFactory.registerMatcher "string", TypeMatcher
         
@@ -161,7 +161,7 @@ class AlternativeMatcher extends AbstractMatcher
             arrayCount = 0
             flattenedArray = []
             for element in previousStepResult
-                if AbstractMatcher._getClassOf(element) is "array"
+                if Utils.getClassOf(element) is "array"
                     flattenedArray.push element...
                     arrayCount += 1
                 else
