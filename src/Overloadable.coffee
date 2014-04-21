@@ -134,11 +134,11 @@ class AbstractMatcher
     compile: (value) ->
         new CompiledMatcher this, value
         
-class TypeMatcher extends AbstractMatcher        
+class ClassMatcher extends AbstractMatcher        
     match: (argument, overloadSignatureElement) ->
         Utils.getClassOf(argument) is overloadSignatureElement
         
-    matcherFactory.registerMatcher "string", TypeMatcher
+    matcherFactory.registerMatcher "string", ClassMatcher
         
 class AlternativeMatcher extends AbstractMatcher        
     match: (argument, overloadSignatureElement) ->
