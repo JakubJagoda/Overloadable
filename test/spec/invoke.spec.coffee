@@ -114,3 +114,20 @@ describe "Overloaded functions", ->
             overloadableFunction true
             
             expect(spiedFunction.callCount).toBe 3
+            
+    describe "Function arguments", ->
+        beforeEach ->
+            overloadableFunction = new Overloadable
+            spiedFunction.reset()
+            
+        it "should recognize function arguments and use them as instanceof check", ->
+            overloadableFunction.overload Object, spiedFunction
+            overloadableFunction.overload Array, spiedFunction
+            
+            expect( ->
+                overloadableFunction 1
+            ).toThrow()
+            
+            overloadableFunction {}
+            overloadableFunction []
+            expect(spiedFunction.callCount).toBe 2
