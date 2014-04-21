@@ -171,6 +171,12 @@ class AlternativeMatcher extends AbstractMatcher
     
     matcherFactory.registerMatcher "array", AlternativeMatcher
     
+class InstanceofMatcher extends AbstractMatcher
+    match: (argument, overloadSignatureElement) ->
+        return argument instanceof overloadSignatureElement
+        
+    matcherFactory.registerMatcher "function", InstanceofMatcher
+    
 class CompiledMatcher
     constructor: (@_matcher, @_value) ->
     
