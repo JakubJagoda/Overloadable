@@ -4,7 +4,7 @@
     beforeEach ->
         overloadableFunc = new Overloadable();
 
-    it "Should not allow for passing incorrect arguments to 'overload' function", ->
+    it "should not allow for passing incorrect arguments to 'overload' function", ->
         expect( ->
             overloadableFunc.overload()
         ).toThrow()
@@ -17,12 +17,23 @@
             overloadableFunc.overload null, null
         ).toThrow()
         
-    it "Should accept string arguments", ->
+    it "should not allow overloads on non-extensible object", ->
         expect( ->
             overloadableFunc.overload "null", ->
         ).not.toThrow()
         
-    it "Should accept array arguments", ->
+        Object.preventExtensions overloadableFunc
+        
+        expect( ->
+            overloadableFunc.overload "null", ->
+        ).toThrow()
+        
+    it "should accept string arguments", ->
+        expect( ->
+            overloadableFunc.overload "null", ->
+        ).not.toThrow()
+        
+    it "should accept array arguments", ->
         expect( ->
             overloadableFunc.overload ["null", "null"], ->
         ).not.toThrow()

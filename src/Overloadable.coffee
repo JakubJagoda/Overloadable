@@ -44,10 +44,8 @@ class Overloadable
         throw new Error ERRORS.NO_MATCHING_OVERLOADS
         
     overload: (args...) ->
-        ###NO TESTS!
         unless Object.isExtensible(this)
             throw new TypeError ERRORS.FUNCTION_NOT_EXTENSIBLE
-        !!!###
         
         argumentsLength = args.length;
         if argumentsLength < 2 then throw new Error ERRORS.INVALID_OVERLOAD_CALL
