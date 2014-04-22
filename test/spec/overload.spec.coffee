@@ -10,7 +10,7 @@
         ).toThrow()
 
         expect( ->
-            overloadableFunc.overload null
+            overloadableFunc.overload [null]
         ).toThrow()
 
         expect( ->
