@@ -1,5 +1,5 @@
 ERRORS =
-    INVALID_OVERLOAD_CALL: ".overload() should be called with at least 1 element defining signature and a function to call"
+    INVALID_OVERLOAD_SIGNATURE: "You should pass a nonempty array of arguments as a signature"
     INVALID_OVERLOAD_FUNCTION: "You should pass a function that will be assigned to set of arguments"
     NO_MATCHING_OVERLOADS: "No overloads matches given signature"
     INVALID_DEFAULT_FUNCTION: "If passed, argument defaultFunction must be a function"
@@ -57,20 +57,17 @@ class Overloadable
 
         throw new Error ERRORS.NO_MATCHING_OVERLOADS
         
-    overload: (args...) ->
+    overload: (signature, functionToCall) ->
         unless Object.isExtensible(this)
             throw new TypeError ERRORS.FUNCTION_NOT_EXTENSIBLE
         
-        argumentsLength = args.length;
-        if argumentsLength < 2 then throw new Error ERRORS.INVALID_OVERLOAD_CALL
-        
-        passedSignature = args[...argumentsLength - 1]
-        functionToCall = args[argumentsLength - 1]
+        if not Array.isArray(signature) or signature.length is 0
+            throw new Error ERRORS.INVALID_OVERLOAD_SIGNATURE
 
         if typeof functionToCall isnt "function"
             throw new Error ERRORS.INVALID_OVERLOAD_FUNCTION
 
-        overload = new Overload passedSignature, functionToCall;
+        overload = new Overload signature, functionToCall;
         @_overloads.push overload
         
     getDefault: -> @_defaultFunction
