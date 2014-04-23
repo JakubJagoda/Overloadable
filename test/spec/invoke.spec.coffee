@@ -163,3 +163,49 @@ describe "Overloaded functions", ->
             ).not.toThrow()
             
             expect(spiedFunction.callCount).toBe 2
+            
+    describe "Object arguments", ->
+        beforeEach ->
+            overloadableFunction = new Overloadable
+            spiedFunction.reset()
+            
+            overloadableFunction.overload
+                foo: "boolean"
+                bar: Array
+                baz: [/\d+/, "number"]
+            , spiedFunction
+            
+        it "should recognize object arguments and use them as property check using other matchers", ->
+            expect( ->
+                overloadableFunction(
+                    foo: true
+                    bar: []
+                    baz: 1
+                )
+            ).not.toThrow()
+            
+            expect( ->
+                overloadableFunction(
+                    foo: false
+                    bar: []
+                    baz: "1"
+                )
+            ).not.toThrow()
+            
+            expect(spiedFunction.callCount).toBe 2
+            
+        it "should throw when there's property missing", ->
+            expect( ->
+                overloadableFunction(
+                    foo: true
+                )
+            ).toThrow()
+            
+        it "should throw when properties don't match", ->
+            expect( ->
+                overloadableFunction(
+                    foo: ""
+                    bar: []
+                    baz: 1
+                )
+            ).toThrow()
