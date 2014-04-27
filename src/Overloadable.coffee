@@ -180,6 +180,20 @@ class RegExpMatcher extends AbstractMatcher
         overloadSignatureElement.test argument
     
     matcherFactory.registerMatcher "regexp", RegExpMatcher
+    
+class PropertyMatcher extends AbstractMatcher
+    match: (argument, overloadSignatureElement) ->
+        for property of overloadSignatureElement
+            if property not of argument then return false
+            
+            element = overloadSignatureElement[property]
+            matcher = AbstractMatcher.getMatcher element
+            unless matcher.match(argument[property], element) then return false
+            
+        true
+        
+    matcherFactory.registerMatcher "object", PropertyMatcher
+            
 
 class CompiledMatcher
     constructor: (@_matcher, @_value) ->
