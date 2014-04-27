@@ -176,7 +176,6 @@ class InstanceofMatcher extends AbstractMatcher
     
 class RegExpMatcher extends AbstractMatcher
     match: (argument, overloadSignatureElement) ->
-        return false if Utils.getClassOf(argument) isnt "string"
         overloadSignatureElement.test argument
     
     matcherFactory.registerMatcher "regexp", RegExpMatcher
