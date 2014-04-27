@@ -147,19 +147,19 @@ describe "Overloaded functions", ->
             overloadableFunction "1"
             expect(spiedFunction.callCount).toBe 1
             
-        it "should not deal with other arguments than strings, when invoking", ->
+        it "should deal with other arguments than strings", ->
             overloadableFunction.overload [/\d+/], spiedFunction
             
             expect( ->
                 overloadableFunction 1
-            ).toThrow()
-            
-            expect( ->
-                overloadableFunction "1"
             ).not.toThrow()
             
+            obj = {}
+            obj.toString = ->
+                "1"
+            
             expect( ->
-                overloadableFunction new String "1"
+                overloadableFunction obj
             ).not.toThrow()
             
             expect(spiedFunction.callCount).toBe 2
