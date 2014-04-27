@@ -10,7 +10,7 @@
         ).toThrow()
 
         expect( ->
-            overloadableFunc.overload [null]
+            overloadableFunc.overload null
         ).toThrow()
 
         expect( ->
@@ -47,6 +47,7 @@
         expect( ->
             overloadableFunc.overload [/\./], ->
         ).not.toThrow()
+        
     it "should accept object arguments", ->
         expect( ->
             overloadableFunc.overload [{}], ->
