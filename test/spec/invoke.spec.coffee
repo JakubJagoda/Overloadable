@@ -209,3 +209,34 @@ describe "Overloaded functions", ->
                     baz: 1
                 )
             ).toThrow()
+
+        it "should check only own properties of objects", ->
+            obj =
+                foo: false
+                bar: []
+                baz: 1
+
+            obj2 = Object.create obj
+
+            expect(->
+                overloadableFunction obj2
+            ).toThrow()
+
+        it "should be able to check inherited properties, when preceeded by ^", ->
+            overloadableFunction = new Overloadable
+            overloadableFunction.overload [
+                "^foo": "boolean"
+                "^bar": Array
+                "^baz": [/\d+/, "number"]
+            ], spiedFunction
+
+            obj =
+                foo: false
+                bar: []
+                baz: 1
+
+            obj2 = Object.create obj
+
+            expect(->
+                overloadableFunction obj2
+            ).not.toThrow()
