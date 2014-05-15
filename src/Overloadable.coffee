@@ -181,14 +181,22 @@ class RegExpMatcher extends AbstractMatcher
     matcherFactory.registerMatcher "regexp", RegExpMatcher
     
 class PropertyMatcher extends AbstractMatcher
+    @_INHERITED_PROPERTY_PREFIX: "^"
     match: (argument, overloadSignatureElement) ->
-        for property of overloadSignatureElement
-            if property not of argument then return false
-            
+        for own property of overloadSignatureElement
+            if property.charAt(0) is PropertyMatcher._INHERITED_PROPERTY_PREFIX
+                propertyName = property.slice(1)
+                hasProperty = propertyName of argument
+            else
+                propertyName = property
+                hasProperty = Object.prototype.hasOwnProperty.call(argument, propertyName)
+
+            if hasProperty isnt true then return false
+
             element = overloadSignatureElement[property]
             matcher = AbstractMatcher.getMatcher element
-            unless matcher.match(argument[property], element) then return false
-            
+            unless matcher.match(argument[propertyName], element) then return false
+
         true
         
     matcherFactory.registerMatcher "object", PropertyMatcher
