@@ -1,11 +1,33 @@
 describe "Library constructor", ->
     overloadableFunc = null
+    propertyList = null;
 
     beforeEach ->
         overloadableFunc = new Overloadable()
+        propertyList = ['_inheritFromOverloadable']
+
+    it "should have all the properties non-enumerable", ->
+        expect(Object.keys(Overloadable)).toEqual([])
+
+    it "should have all the properties non-configurable", ->
+        for property in propertyList
+            expect( ->
+                Object.defineProperty Overloadable, property,
+                    enumerable: true
+            ).toThrow()
+
+        expect(Object.keys(Overloadable)).toEqual([])
+
+    it "should have all the properties non-writable", ->
+        for property in propertyList
+            oldValue = Overloadable[property]
+            Overloadable[property] = null
+            expect(Overloadable[property]).toEqual(oldValue)
         
     describe ".prototype", ->
-        propertyList = ["_invoke", "getDefault", "match", "overload"]
+        beforeEach(->
+            propertyList = ["_invoke", "match", "overload"]
+        )
         it "should have all the properties non-enumerable", ->
             expect(Object.keys(Overloadable.prototype)).toEqual([])
         
@@ -16,7 +38,7 @@ describe "Library constructor", ->
                         enumerable: true
                 ).toThrow()
                 
-            expect(Object.keys(Overloadable)).toEqual([])
+            expect(Object.keys(Overloadable.prototype)).toEqual([])
             
         it "should have all the properties non-writable", ->
             for property in propertyList
@@ -29,7 +51,7 @@ describe "Library constructor", ->
         
     describe "Donstructed functions", ->
         it "should have a proper public api", ->
-            publicApi = ["overload", "getDefault", "match"]
+            publicApi = ["overload", "match"]
             for method in publicApi
                 expect(typeof overloadableFunc[method]).toBe "function"
 
@@ -51,8 +73,3 @@ describe "Library constructor", ->
             expect(->
                 new Overloadable null
             ).not.toThrow()
-            
-        it "should be able to return a default function", ->
-            defaultFunction = ->
-            overloadableFunction = new Overloadable defaultFunction
-            expect(overloadableFunction.getDefault()).toBe defaultFunction 
