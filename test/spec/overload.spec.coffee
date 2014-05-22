@@ -31,6 +31,12 @@
     ).toThrow()
   )
 
+  it("should accept no arguments", ->
+    expect(->
+      overloadableFunc.overload([], ->)
+    ).not.toThrow()
+  )
+
   it("should accept string arguments", ->
     expect(->
       overloadableFunc.overload(["null"], ->)

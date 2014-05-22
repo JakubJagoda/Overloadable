@@ -37,6 +37,19 @@ describe("Invoking overloaded functions", ->
     )
   )
 
+  describe("No arguments", ->
+    beforeEach(->
+      overloadableFunction = new Overloadable
+      spiedFunction.reset()
+    )
+    
+    it("should allow for invoking and matching functions with no arguments", ->
+      overloadableFunction.overload([], spiedFunction)
+      overloadableFunction()
+      expect(spiedFunction).toHaveBeenCalled()
+    )
+  )
+
   describe("String arguments", ->
     testedTypesAndExamples =
       number: 7
