@@ -1,4 +1,4 @@
-describe("Overloaded functions", ->
+describe("Invoking overloaded functions", ->
   overloadableFunction = null
   spiedFunction = jasmine.createSpy()
 
