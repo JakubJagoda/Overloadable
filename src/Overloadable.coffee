@@ -32,7 +32,7 @@ class Overloadable
         Object.defineProperty(overloadableFunction, property,
           value: Overloadable.prototype[property])
 
-  constructor: (defaultFunction) ->
+  constructor: (defaultFunction = null) ->
     if defaultFunction? and typeof defaultFunction isnt "function"
       throw new TypeError(ERRORS.INVALID_DEFAULT_FUNCTION)
 
@@ -52,7 +52,7 @@ class Overloadable
     matchedFunction = @match(passedArguments...)
     return matchedFunction.apply(thisArg, passedArguments) if matchedFunction?
 
-    throw new Error(ERRORS.NO_MATCHING_OVERLOADS)
+    throw new TypeError(ERRORS.NO_MATCHING_OVERLOADS)
 
   _getDefaultFunction: -> @_defaultFunction
 
@@ -85,7 +85,7 @@ class Overload
       try
         matcher = AbstractMatcher.getMatcher(signatureElement)
       catch e
-        throw new Error(ERRORS.UNSUPPORTED_SIGNATURE_ELEMENT)
+        throw new TypeError(ERRORS.UNSUPPORTED_SIGNATURE_ELEMENT)
       matcher.compile(signatureElement)
 
     @_signature = compiledSignature
