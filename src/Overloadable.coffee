@@ -60,7 +60,7 @@ class Overloadable
     unless Object.isExtensible(this)
       throw new TypeError(ERRORS.FUNCTION_NOT_EXTENSIBLE)
 
-    if not Array.isArray(signature) or signature.length is 0
+    unless Array.isArray(signature)
       throw new Error(ERRORS.INVALID_OVERLOAD_SIGNATURE)
 
     if typeof functionToCall isnt "function"
