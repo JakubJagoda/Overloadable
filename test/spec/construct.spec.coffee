@@ -67,22 +67,21 @@ describe "Library constructor", ->
     )
   )
   describe("Default function", ->
-    it("should throw error when default function isn't undefined, null or a function", ->
-      for item in [7, "foo", true, {}]
-        expect(->
-          new Overloadable(item)
-        ).toThrow()
-
+    it("should not throw when default function is a function", ->
       expect(->
         new Overloadable(->)
       ).not.toThrow()
+    )
 
-      expect(->
-        new Overloadable
-      ).not.toThrow()
-
+    it("should not throw when default function is null", ->
       expect(->
         new Overloadable(null)
+      ).not.toThrow()
+    )
+
+    it("should not throw when default function is undefined", ->
+      expect(->
+        new Overloadable()
       ).not.toThrow()
     )
   )
