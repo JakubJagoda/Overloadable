@@ -28,6 +28,7 @@ class Overloadable
         Object.setPrototypeOf(overloadableFunction, Overloadable.prototype)
     else return (overloadableFunction) ->
       prototypeProperties = Object.getOwnPropertyNames(Overloadable.prototype)
+
       for property in prototypeProperties when property isnt "constructor"
         Object.defineProperty(overloadableFunction, property,
           value: Overloadable.prototype[property])
@@ -50,9 +51,9 @@ class Overloadable
 
   _invoke: (thisArg, passedArguments...) ->
     matchedFunction = @match(passedArguments...)
-    return matchedFunction.apply(thisArg, passedArguments) if matchedFunction?
 
-    throw new TypeError(ERRORS.NO_MATCHING_OVERLOADS)
+    if matchedFunction? then return matchedFunction.apply(thisArg, passedArguments)
+    else throw new TypeError(ERRORS.NO_MATCHING_OVERLOADS)
 
   _getDefaultFunction: -> @_defaultFunction
 
@@ -63,7 +64,7 @@ class Overloadable
     unless Array.isArray(signature)
       throw new Error(ERRORS.INVALID_OVERLOAD_SIGNATURE)
 
-    if typeof functionToCall isnt "function"
+    unless typeof functionToCall is "function"
       throw new Error(ERRORS.INVALID_OVERLOAD_FUNCTION)
 
     overload = new Overload(signature, functionToCall)
@@ -86,6 +87,7 @@ class Overload
         matcher = AbstractMatcher.getMatcher(signatureElement)
       catch e
         throw new TypeError(ERRORS.UNSUPPORTED_SIGNATURE_ELEMENT)
+
       matcher.compile(signatureElement)
 
     @_signature = compiledSignature
@@ -116,7 +118,7 @@ class MatcherFactory
   getMatcher: (argumentClass) ->
     unless @_matchers[argumentClass]? then throw new Error
 
-    new @_matchers[argumentClass]()
+    new @_matchers[argumentClass]
 
 matcherFactory = new MatcherFactory()
 
