@@ -2,33 +2,28 @@
   overloadableFunc = null;
 
   beforeEach(->
-    overloadableFunc = new Overloadable();
+    overloadableFunc = new Overloadable
   )
 
-  it("should not allow for passing incorrect arguments to 'overload' function", ->
-    expect(->
-      overloadableFunc.overload()
-    ).toThrow()
-
-    expect(->
-      overloadableFunc.overload([null])
-    ).toThrow()
-
-    expect(->
-      overloadableFunc.overload([null], null)
-    ).toThrow()
-  )
-
-  it("should not allow overloads on non-extensible object", ->
+  it("should correctly overload a function when signature and function are provided", ->
     expect(->
       overloadableFunc.overload(["null"], ->)
     ).not.toThrow()
+  )
 
+  it("should not allow overloads on non-extensible object", ->
     Object.preventExtensions(overloadableFunc)
 
     expect(->
       overloadableFunc.overload(["null"], ->)
     ).toThrow()
+  )
+
+  it("should return current number of saved overloads", ->
+    overloadableFunc.overload(["null"], ->)
+    count = overloadableFunc.overload(["null"], ->)
+
+    expect(count).toEqual(2)
   )
 
   it("should accept no arguments", ->
