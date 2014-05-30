@@ -104,7 +104,6 @@ class Overload
 
     true
 
-
 class MatcherFactory
   constructor: () ->
     @_matchers = Object.create(null)
@@ -187,7 +186,7 @@ class PropertyMatcher extends AbstractMatcher
         hasProperty = propertyName of argument
       else
         propertyName = property
-        hasProperty = Object.prototype.hasOwnProperty.call(argument, propertyName)
+        hasProperty = Object::hasOwnProperty.call(argument, propertyName)
 
       if hasProperty isnt true then return false
 
@@ -199,7 +198,6 @@ class PropertyMatcher extends AbstractMatcher
 
   matcherFactory.registerMatcher("object", PropertyMatcher)
 
-
 class CompiledMatcher
   constructor: (@_matcher, @_value) ->
 
@@ -209,4 +207,10 @@ class CompiledMatcher
 
   match: (argument) -> @getMatcher().match(argument, @getValue())
 
-@Overloadable = Overloadable
+
+if define?.amd?
+  define(-> Overloadable)
+else if module?.exports?
+  module.exports = Overloadable
+else
+  @Overloadable = Overloadable
