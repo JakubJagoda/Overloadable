@@ -32,7 +32,8 @@ module.exports = function (config) {
         coffeePreprocessor: {
             // options passed to the coffee compiler
             options: {
-                sourceMap: true
+                sourceMap: true,
+                bare: false
             }
         },
 
