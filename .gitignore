@@ -17,3 +17,7 @@
 !test/*.js
 !test/spec
 !test/spec/*.coffee
+
+#unignore dist dir
+!dist
+!dist/*
