@@ -333,7 +333,7 @@ Creates and returns a new overloadable function.
 
 **Returns** `(...any) => any` - an overloadable function
 
-**Important note:** in ECMAScript, up to version 5, it is not possible to change the prototype of a function. So it means that inheritance from `Overloadable.prototype` will be done by copying `Overloadable.prototype`'s properties to the overloadable function. However altering prototypes of functions is possible in ES6, so if your browser supports ES6, `Object.setPrototypeOf` will be used instead and the prototype chain of overloadable functions will actually include `Overloadable.prototype`.
+**Important note:** in ECMAScript, up to version 5, it is not possible to change the prototype of a function. In version 6, however, there is `Object.setPrototypeOf`, but it's currently considered to be a very slow operation. It means, that inheritance in case of overloadable functions will be done by simple copying properties from `Overloadable.prototype` to overloadable functions. Which also means, that `(new Overloadable) instanceof Overloadable` will be false! 
 
 ###Overloadable.prototype.overload(signature, functionToCall)
 

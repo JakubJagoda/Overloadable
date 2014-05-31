@@ -20,13 +20,7 @@ class Utils
     /\[object (\w+)\]/.exec(whatAsString)[1].toLowerCase()
 
 class Overloadable
-  @_inheritFromOverloadable: do ->
-    if typeof Object.setPrototypeOf is "function"
-      Object.setPrototypeOf(Overloadable.prototype, Function.prototype)
-
-      return (overloadableFunction) ->
-        Object.setPrototypeOf(overloadableFunction, Overloadable.prototype)
-    else return (overloadableFunction) ->
+  @_inheritFromOverloadable: (overloadableFunction) ->
       prototypeProperties = Object.getOwnPropertyNames(Overloadable.prototype)
 
       for property in prototypeProperties when property isnt "constructor"
