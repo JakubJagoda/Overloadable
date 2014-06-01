@@ -1,0 +1,8 @@
+.idea
+.gitignore
+.npmignore
+bower.json
+Gruntfile.js
+node_modules
+src
+test
