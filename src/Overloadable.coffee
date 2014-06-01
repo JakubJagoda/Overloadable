@@ -1,7 +1,7 @@
 ERRORS =
   INVALID_OVERLOAD_SIGNATURE: "You should pass a nonempty array of arguments as a signature"
   INVALID_OVERLOAD_FUNCTION: "You should pass a function that will be assigned to set of arguments"
-  NO_MATCHING_OVERLOADS: "No overloads matches given signature"
+  NO_MATCHING_OVERLOADS: "No overloads match given signature"
   INVALID_DEFAULT_FUNCTION: "If passed, argument defaultFunction must be a function"
   FUNCTION_NOT_EXTENSIBLE: "You cannot overload a non-extensible function"
   NO_SUCH_MATCHER: "That type of matcher doesn't exist"

@@ -94,7 +94,7 @@ In order to create an overloadable function just call `Overloadable` constructor
 ```JS
 var ov = new Overloadable;
 ov();
-//TypeError: No overloads matches given signature
+//TypeError: No overloads match given signature
 
 var someFunc = function () { console.log("..."); };
 var ov2 = new Overloadable(someFunc);
