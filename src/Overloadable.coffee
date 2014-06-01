@@ -1,7 +1,7 @@
 ERRORS =
   INVALID_OVERLOAD_SIGNATURE: "You should pass a nonempty array of arguments as a signature"
   INVALID_OVERLOAD_FUNCTION: "You should pass a function that will be assigned to set of arguments"
-  NO_MATCHING_OVERLOADS: "No overloads matches given signature"
+  NO_MATCHING_OVERLOADS: "No overloads match given signature"
   INVALID_DEFAULT_FUNCTION: "If passed, argument defaultFunction must be a function"
   FUNCTION_NOT_EXTENSIBLE: "You cannot overload a non-extensible function"
   NO_SUCH_MATCHER: "That type of matcher doesn't exist"
@@ -20,13 +20,7 @@ class Utils
     /\[object (\w+)\]/.exec(whatAsString)[1].toLowerCase()
 
 class Overloadable
-  @_inheritFromOverloadable: do ->
-    if typeof Object.setPrototypeOf is "function"
-      Object.setPrototypeOf(Overloadable.prototype, Function.prototype)
-
-      return (overloadableFunction) ->
-        Object.setPrototypeOf(overloadableFunction, Overloadable.prototype)
-    else return (overloadableFunction) ->
+  @_inheritFromOverloadable: (overloadableFunction) ->
       prototypeProperties = Object.getOwnPropertyNames(Overloadable.prototype)
 
       for property in prototypeProperties when property isnt "constructor"
