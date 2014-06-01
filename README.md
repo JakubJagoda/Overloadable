@@ -6,6 +6,9 @@ Not so big, yet easy to use and elegant JavaScript function overloading. Allows 
 #Table of contents
 - [Motivation](#motivation)
 - [How to use it](#how-to-use-it)
+    - [Installation](#installation)
+    - [Build](#build)
+    - [Tests](#tests)
     - [Creating overloadable functions](#creating-overloadable-functions)
     - [Function overloading](#function-overloading)
     - [Prevent further overloading](#prevent-further-overloading)
@@ -67,7 +70,23 @@ jQueer.fn.init.overload(["function"], function (readyFunction) {
 That's quite better, you'll probably agree - one long function can be split into a set of smaller ones, parameters' names are correct and tell you exactly what they do (no longer `selector` which is not a selector), everyone's happy. So basically what you get from Overloadable is the ability to create functions (yeah, pure functions, no objects with `.call` or `.invoke` method) that can be easily overloaded and, when called, take care of invoking the proper overload, with the same set of arguments and `this` value.
 
 #How to use it
-This quick tutorial will help you to learn what Overloadable offers.
+This quick tutorial will help you to learn what Overloadable offers. If you are not interested in setting up the library but rather how to create and use overloadable functions, [skip to this part](#creating-overloadable-functions).
+
+####Installation
+#####Browser
+To get the package from bower registry type `bower install overloadable`. Then link to the script that is in `bower_components/overloadable/dist/Overloadable.js` (or `.min.js`).
+
+#####Node
+Overloadable can be get from NPM just type `npm install overloadable`. That's it, you can now get a reference to Overloadable constructor by `require('overloadable')`.
+
+####Build
+If you want to build Overloadable, first clone the repository using `git clone https://github.com/JakubJagoda/Overloadable.git`. Then go to the cloned folder and install all the dev dependencies by typing `npm install`. After the dependencies are ready, run build task by typing either `grunt` or `grunt build` (requires grunt-cli to be installed globally, to install type `npm install -g grunt-cli`).
+ 
+####Tests
+To run tests type `grunt test`, for continuous testing type `grunt test:continuous`. CoffeeScript files are compiled by karma's preprocessors.
+
+
+That's it, now let's go to the usage.
 
 ####Creating overloadable functions
 In order to create an overloadable function just call `Overloadable` constructor. This constructor takes one optional parameter, the *defaultFunction*. This is the function that gets called, when arguments that you invoked your function with, don't match any overloads you set. If no default function was provided a `TypeError` will be thrown in such a situation.
@@ -152,7 +171,7 @@ ov("foo");
 //console: "foo"
 ```
 
-That's all you need to know about basic usage of Overloadable. Now let's go and find out how you can describe the invocation arguments using different matchers.
+That's all you need to know about basic usage of Overloadable.
 
 #Matchers
 ###Class matcher
@@ -550,3 +569,6 @@ ov.overload([{
 //Error - despite these signatures aren't identical, the latter is shadowed by 
 //the former (it'll never be reached, since all objects would match the former)
 ```
+
+#License
+MIT. For details see [LICENSE](LICENSE)
