@@ -68,7 +68,7 @@
 
   grunt.registerTask("default", function () {
     /*
-      tests are run two times in order to ensure that after compiling with contrib-coffee
+      tests run two times in order to ensure that after compiling with contrib-coffee
       (if it had other coffeescript compiler than karma) and minifying, everything works fine
     */
 
